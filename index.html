@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kalkulator veličine endotrahealnog tubusa</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f4f6f8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+  }
+  .card {
+    background: white;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 400px;
+  }
+  h2 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 20px;
+  }
+  label {
+    display: block;
+    margin-top: 15px;
+    font-weight: bold;
+    color: #34495e;
+  }
+  select, input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 16px;
+  }
+  button {
+    width: 100%;
+    margin-top: 25px;
+    padding: 12px;
+    background: #2980b9;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  button:hover {
+    background: #1f6391;
+  }
+  .result {
+    margin-top: 25px;
+    padding: 15px;
+    background: #ecf6ff;
+    border-left: 5px solid #2980b9;
+    border-radius: 6px;
+    font-size: 18px;
+    text-align: center;
+    display: none;
+  }
+  .result span {
+    font-weight: bold;
+    color: #2980b9;
+    font-size: 22px;
+  }
+  .note {
+    font-size: 12px;
+    color: #888;
+    margin-top: 15px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <h2>ETT Kalkulator</h2>
+
+  <label for="gender">Pol</label>
+  <select id="gender">
+    <option value="0">Muški</option>
+    <option value="1">Ženski</option>
+  </select>
+
+  <label for="height">Tjelesna visina (cm)</label>
+  <input type="number" id="height" placeholder="npr. 175" min="100" max="230">
+
+  <button onclick="calculate()">Izračunaj</button>
+
+  <div class="result" id="result">
+    Preporučeni unutrašnji promjer (ID):<br>
+    <span id="idValue"></span> mm
+    <br><br>
+    Najbliža standardna veličina: <span id="roundedValue"></span> mm
+  </div>
+
+  <div class="note">
+    Formula: ID = 0.128×pol + 0.029×visina + 2.06<br>
+    Rezultat je orijentacioni – uvijek koristiti kliničku procjenu.
+  </div>
+</div>
+
+<script>
+function calculate() {
+  const gender = parseFloat(document.getElementById('gender').value);
+  const height = parseFloat(document.getElementById('height').value);
+
+  if (isNaN(height) || height <= 0) {
+    alert('Molimo unesite validnu visinu.');
+    return;
+  }
+
+  const id = 0.128 * gender + 0.029 * height + 2.06;
+
+  // Standardne veličine tubusa (po 0.5 mm koraku)
+  const standardSizes = [];
+  for (let s = 5.0; s <= 9.0; s += 0.5) {
+    standardSizes.push(s);
+  }
+
+  const rounded = standardSizes.reduce((prev, curr) =>
+    Math.abs(curr - id) < Math.abs(prev - id) ? curr : prev
+  );
+
+  document.getElementById('idValue').innerText = id.toFixed(2);
+  document.getElementById('roundedValue').innerText = rounded.toFixed(1);
+  document.getElementById('result').style.display = 'block';
+}
+</script>
+
+</body>
+</html>
