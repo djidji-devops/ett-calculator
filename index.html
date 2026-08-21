@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="sr">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kalkulator veličine endotrahealnog tubusa</title>
+<title>Endotracheal Tube Size Calculator</title>
 <style>
   body {
     font-family: Arial, sans-serif;
@@ -82,29 +82,29 @@
 <body>
 
 <div class="card">
-  <h2>ETT Kalkulator</h2>
+  <h2>ETT Calculator</h2>
 
-  <label for="gender">Pol</label>
+  <label for="gender">Gender</label>
   <select id="gender">
-    <option value="0">Muški</option>
-    <option value="1">Ženski</option>
+    <option value="0">Male</option>
+    <option value="1">Female</option>
   </select>
 
-  <label for="height">Tjelesna visina (cm)</label>
-  <input type="number" id="height" placeholder="npr. 175" min="100" max="230">
+  <label for="height">Body Height (cm)</label>
+  <input type="number" id="height" placeholder="e.g. 175" min="100" max="230">
 
-  <button onclick="calculate()">Izračunaj</button>
+  <button onclick="calculate()">Calculate</button>
 
   <div class="result" id="result">
-    Preporučeni unutrašnji promjer (ID):<br>
+    Recommended internal diameter (ID):<br>
     <span id="idValue"></span> mm
     <br><br>
-    Najbliža standardna veličina: <span id="roundedValue"></span> mm
+    Nearest standard size: <span id="roundedValue"></span> mm
   </div>
 
   <div class="note">
-    Formula: ID = 0.128×pol + 0.029×visina + 2.06<br>
-    Rezultat je orijentacioni – uvijek koristiti kliničku procjenu.
+    Formula: ID = 0.128×gender + 0.029×height + 2.06<br>
+    Result is a guideline only – always use clinical judgment.
   </div>
 </div>
 
@@ -114,13 +114,13 @@ function calculate() {
   const height = parseFloat(document.getElementById('height').value);
 
   if (isNaN(height) || height <= 0) {
-    alert('Molimo unesite validnu visinu.');
+    alert('Please enter a valid height.');
     return;
   }
 
   const id = 0.128 * gender + 0.029 * height + 2.06;
 
-  // Standardne veličine tubusa (po 0.5 mm koraku)
+  // Standard tube sizes (0.5 mm steps)
   const standardSizes = [];
   for (let s = 5.0; s <= 9.0; s += 0.5) {
     standardSizes.push(s);
