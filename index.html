@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Endotracheal Tube Size Calculator</title>
+<title>Pediatric Endotracheal Tube Size Calculator</title>
 
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" href="icon-512.png">
@@ -19,7 +19,10 @@
     align-items: center;
     min-height: 100vh;
     margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
   }
+
   .card {
     background: white;
     padding: 30px 40px;
@@ -27,19 +30,36 @@
     box-shadow: 0 4px 20px rgba(0,0,0,0.1);
     width: 100%;
     max-width: 400px;
+    box-sizing: border-box;
   }
+
   h2 {
     text-align: center;
     color: #2c3e50;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
   }
+
+  .age-warning {
+    background: #fff3cd;
+    border: 2px solid #f0ad4e;
+    color: #856404;
+    padding: 12px;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 20px;
+    line-height: 1.4;
+  }
+
   label {
     display: block;
     margin-top: 15px;
     font-weight: bold;
     color: #34495e;
   }
-  select, input {
+
+  select,
+  input {
     width: 100%;
     padding: 10px;
     margin-top: 5px;
@@ -48,6 +68,7 @@
     box-sizing: border-box;
     font-size: 16px;
   }
+
   button {
     width: 100%;
     margin-top: 25px;
@@ -59,9 +80,11 @@
     font-size: 16px;
     cursor: pointer;
   }
+
   button:hover {
     background: #1f6391;
   }
+
   .result {
     margin-top: 25px;
     padding: 15px;
@@ -72,77 +95,141 @@
     text-align: center;
     display: none;
   }
+
   .result span {
     font-weight: bold;
     color: #2980b9;
     font-size: 22px;
   }
+
   .note {
     font-size: 12px;
     color: #888;
     margin-top: 15px;
     text-align: center;
+    line-height: 1.5;
+  }
+
+  .formula {
+    margin-top: 10px;
+    font-size: 12px;
+    color: #666;
+    text-align: center;
   }
 </style>
 </head>
+
 <body>
 
 <div class="card">
-  <h2>ETT Calculator</h2>
+
+  <h2>Pediatric ETT Calculator</h2>
+
+  <div class="age-warning">
+    ⚠️ IMPORTANT: This calculator is valid ONLY for children up to 8 years of age.
+  </div>
 
   <label for="gender">Gender</label>
   <select id="gender">
-    <option value="0">Male</option>
-    <option value="1">Female</option>
+    <option value="1">Male</option>
+    <option value="0">Female</option>
   </select>
 
   <label for="height">Body Height (cm)</label>
-  <input type="number" id="height" placeholder="e.g. 175" min="100" max="230">
+  <input
+    type="number"
+    id="height"
+    placeholder="e.g. 120"
+    min="40"
+    max="150"
+    step="0.1"
+  >
 
   <button onclick="calculate()">Calculate</button>
 
   <div class="result" id="result">
     Recommended internal diameter (ID):<br>
     <span id="idValue"></span> mm
+
     <br><br>
-    Nearest standard size: <span id="roundedValue"></span> mm
+
+    Nearest standard size:
+    <span id="roundedValue"></span> mm
+  </div>
+
+  <div class="formula">
+    Formula: ID = 0.128 × gender + 0.029 × BH + 2.06
   </div>
 
   <div class="note">
-    Formula: ID = 0.128×gender + 0.029×height + 2.06<br>
-    Result is a guideline only – always use clinical judgment.
+    Male = 1, Female = 0<br>
+    BH = Body Height in cm<br>
+    ID = Internal Diameter in mm<br><br>
+    This calculator is intended as a guideline only.
+    Always use clinical judgment and follow local clinical protocols.
   </div>
+
 </div>
 
 <script>
+
 function calculate() {
-  const gender = parseFloat(document.getElementById('gender').value);
-  const height = parseFloat(document.getElementById('height').value);
+
+  const gender = parseFloat(
+    document.getElementById('gender').value
+  );
+
+  const height = parseFloat(
+    document.getElementById('height').value
+  );
 
   if (isNaN(height) || height <= 0) {
-    alert('Please enter a valid height.');
+    alert('Please enter a valid body height.');
     return;
   }
 
+  /*
+    Formula:
+    ID = 0.128 × gender + 0.029 × BH + 2.06
+
+    Male = 1
+    Female = 0
+    BH = Body Height in cm
+    ID = Internal Diameter in mm
+  */
+
   const id = 0.128 * gender + 0.029 * height + 2.06;
 
+  // Standard ETT sizes from 5.0 mm to 9.0 mm
   const standardSizes = [];
+
   for (let s = 5.0; s <= 9.0; s += 0.5) {
-    standardSizes.push(s);
+    standardSizes.push(Number(s.toFixed(1)));
   }
 
+  // Find the nearest standard size
   const rounded = standardSizes.reduce((prev, curr) =>
-    Math.abs(curr - id) < Math.abs(prev - id) ? curr : prev
+    Math.abs(curr - id) < Math.abs(prev - id)
+      ? curr
+      : prev
   );
 
-  document.getElementById('idValue').innerText = id.toFixed(2);
-  document.getElementById('roundedValue').innerText = rounded.toFixed(1);
-  document.getElementById('result').style.display = 'block';
+  document.getElementById('idValue').innerText =
+    id.toFixed(2);
+
+  document.getElementById('roundedValue').innerText =
+    rounded.toFixed(1);
+
+  document.getElementById('result').style.display =
+    'block';
 }
 
+
+// Register service worker for PWA functionality
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js');
 }
+
 </script>
 
 </body>
