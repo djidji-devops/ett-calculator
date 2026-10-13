@@ -2,223 +2,283 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pediatric Endotracheal Tube Size Calculator</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link rel="manifest" href="manifest.json">
-<link rel="icon" type="image/png" href="icon-512.png">
-<link rel="apple-touch-icon" href="icon-512.png">
-<meta name="theme-color" content="#2980b9">
+  <title>Pediatric ETT Calculator</title>
 
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    background: #f4f6f8;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    margin: 0;
-    padding: 20px;
-    box-sizing: border-box;
-  }
+  <meta name="theme-color" content="#2980b9">
+  <meta name="description" content="Pediatric endotracheal tube internal diameter calculator based on body height.">
 
-  .card {
-    background: white;
-    padding: 30px 40px;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-    width: 100%;
-    max-width: 400px;
-    box-sizing: border-box;
-  }
+  <link rel="manifest" href="./manifest.json">
+  <link rel="icon" type="image/png" href="./icon-512.png">
+  <link rel="apple-touch-icon" href="./icon-512.png">
 
-  h2 {
-    text-align: center;
-    color: #2c3e50;
-    margin-bottom: 10px;
-  }
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-  .age-warning {
-    background: #fff3cd;
-    border: 2px solid #f0ad4e;
-    color: #856404;
-    padding: 12px;
-    border-radius: 8px;
-    text-align: center;
-    font-weight: bold;
-    margin-bottom: 20px;
-    line-height: 1.4;
-  }
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
 
-  label {
-    display: block;
-    margin-top: 15px;
-    font-weight: bold;
-    color: #34495e;
-  }
+    .card {
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+    }
 
-  input {
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    box-sizing: border-box;
-    font-size: 16px;
-  }
+    h2 {
+      text-align: center;
+      color: #2c3e50;
+      margin: 0 0 20px;
+    }
 
-  button {
-    width: 100%;
-    margin-top: 25px;
-    padding: 12px;
-    background: #2980b9;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-size: 16px;
-    cursor: pointer;
-  }
+    .age-warning {
+      background: #fff3cd;
+      border: 2px solid #f0ad4e;
+      color: #856404;
+      padding: 12px;
+      border-radius: 8px;
+      text-align: center;
+      font-weight: bold;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
 
-  button:hover {
-    background: #1f6391;
-  }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+      color: #34495e;
+    }
 
-  .result {
-    margin-top: 25px;
-    padding: 15px;
-    background: #ecf6ff;
-    border-left: 5px solid #2980b9;
-    border-radius: 6px;
-    font-size: 18px;
-    text-align: center;
-    display: none;
-  }
+    input {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      margin-top: 7px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+    }
 
-  .result span {
-    font-weight: bold;
-    color: #2980b9;
-    font-size: 22px;
-  }
+    input:focus {
+      outline: 2px solid #2980b9;
+      outline-offset: 1px;
+    }
 
-  .note {
-    font-size: 12px;
-    color: #888;
-    margin-top: 15px;
-    text-align: center;
-    line-height: 1.5;
-  }
+    button {
+      width: 100%;
+      margin-top: 22px;
+      padding: 13px;
+      background: #2980b9;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
 
-  .formula {
-    margin-top: 10px;
-    font-size: 12px;
-    color: #666;
-    text-align: center;
-  }
-</style>
+    button:hover {
+      background: #1f6391;
+    }
+
+    button:focus-visible {
+      outline: 3px solid #154360;
+      outline-offset: 3px;
+    }
+
+    .result {
+      margin-top: 25px;
+      padding: 18px 12px;
+      background: #ecf6ff;
+      border-left: 5px solid #2980b9;
+      border-radius: 6px;
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    .result[hidden] {
+      display: none;
+    }
+
+    .result span {
+      font-weight: bold;
+      color: #2980b9;
+      font-size: 24px;
+    }
+
+    .result .result-label {
+      font-size: 16px;
+      color: #34495e;
+    }
+
+    .formula {
+      margin-top: 18px;
+      font-size: 13px;
+      color: #666;
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    .note {
+      font-size: 12px;
+      color: #777;
+      margin-top: 18px;
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 420px) {
+      .card {
+        padding: 24px 20px;
+      }
+    }
+  </style>
 </head>
 
 <body>
+  <main class="card">
+    <h2>Pediatric ETT Calculator</h2>
 
-<div class="card">
+    <div class="age-warning">
+      ⚠️ IMPORTANT: Intended for children up to
+      8 years of age, subject to validation of the model.
+    </div>
 
-  <h2>Pediatric ETT Calculator</h2>
+    <form id="calculatorForm">
+      <label for="height">Body Height (cm)</label>
 
-  <div class="age-warning">
-    ⚠️ IMPORTANT: This calculator is intended ONLY
-    for children up to 8 years of age.
-  </div>
+      <input
+        type="number"
+        id="height"
+        name="height"
+        placeholder="e.g. 120"
+        min="40"
+        max="150"
+        step="0.1"
+        inputmode="decimal"
+        required
+      >
 
-  <label for="height">Body Height (cm)</label>
-  <input
-    type="number"
-    id="height"
-    placeholder="e.g. 120"
-    min="40"
-    max="150"
-    step="0.1"
-  >
+      <button type="submit">Calculate</button>
+    </form>
 
-  <button onclick="calculate()">Calculate</button>
+    <section
+      class="result"
+      id="result"
+      aria-live="polite"
+      aria-atomic="true"
+      hidden
+    >
+      <div class="result-label">
+        Calculated internal diameter (ID):
+      </div>
 
-  <div class="result" id="result">
-    Recommended internal diameter (ID):<br>
-    <span id="idValue"></span> mm
+      <span id="idValue">--</span> mm
 
-    <br><br>
+      <br><br>
 
-    Nearest standard size:
-    <span id="roundedValue"></span> mm
-  </div>
+      <div class="result-label">
+        Nearest standard size:
+      </div>
 
-  <div class="formula">
-    Formula: ID = 2.1152 + 0.02963 × height
-  </div>
+      <span id="roundedValue">--</span> mm
+    </section>
 
-  <div class="note">
-    Height = Body height in cm<br>
-    ID = Internal diameter in mm<br><br>
-    This calculator is intended as a guideline only.
-    Always use clinical judgment and follow local
-    clinical protocols.
-  </div>
+    <div class="formula">
+      <strong>Formula:</strong><br>
+      ID (mm) = 2.1152 + 0.02963 × height (cm)
+    </div>
 
-</div>
+    <div class="note">
+      Height = body height in centimetres<br>
+      ID = internal diameter in millimetres<br><br>
 
-<script>
-function calculate() {
-  const height = parseFloat(
-    document.getElementById('height').value
-  );
+      This calculator is an estimation tool only.
+      It does not replace clinical assessment, appropriate
+      tube selection, or local clinical protocols.
+      Verify the formula and its validated age and height
+      ranges before clinical use.
+    </div>
+  </main>
 
-  if (
-    !Number.isFinite(height) ||
-    height < 40 ||
-    height > 150
-  ) {
-    alert('Please enter a height between 40 and 150 cm.');
-    return;
-  }
+  <script>
+    'use strict';
 
-  // Final model:
-  // ID (mm) = 2.1152 + 0.02963 × height (cm)
+    const form = document.getElementById('calculatorForm');
+    const heightInput = document.getElementById('height');
+    const result = document.getElementById('result');
+    const idValue = document.getElementById('idValue');
+    const roundedValue = document.getElementById('roundedValue');
 
-  const id = 2.1152 + 0.02963 * height;
+    // Final model:
+    // ID (mm) = 2.1152 + 0.02963 × height (cm)
 
-  // Standard ETT sizes from 5.0 mm to 9.0 mm
-  const standardSizes = [];
+    // Standard sizes displayed by this calculator.
+    const standardSizes = [];
 
-  for (let s = 5.0; s <= 9.0; s += 0.5) {
-    standardSizes.push(Number(s.toFixed(1)));
-  }
+    for (let size = 5.0; size <= 9.0; size += 0.5) {
+      standardSizes.push(Number(size.toFixed(1)));
+    }
 
-  // Find the nearest standard size
-  const rounded = standardSizes.reduce((prev, curr) =>
-    Math.abs(curr - id) < Math.abs(prev - id)
-      ? curr
-      : prev
-  );
+    function calculate() {
+      const height = Number(heightInput.value);
 
-  document.getElementById('idValue').innerText =
-    id.toFixed(2);
+      if (
+        heightInput.value.trim() === '' ||
+        !Number.isFinite(height) ||
+        height < 40 ||
+        height > 150
+      ) {
+        result.hidden = true;
+        heightInput.focus();
+        alert('Please enter a height between 40 and 150 cm.');
+        return;
+      }
 
-  document.getElementById('roundedValue').innerText =
-    rounded.toFixed(1);
+      const id = 2.1152 + 0.02963 * height;
 
-  document.getElementById('result').style.display =
-    'block';
-}
+      const nearestSize = standardSizes.reduce((closest, size) => {
+        return Math.abs(size - id) < Math.abs(closest - id)
+          ? size
+          : closest;
+      }, standardSizes[0]);
 
-// Register service worker for PWA functionality
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js')
-    .catch(error => console.error(
-      'Service worker registration failed:', error
-    ));
-}
-</script>
+      idValue.textContent = id.toFixed(2);
+      roundedValue.textContent = nearestSize.toFixed(1);
 
+      result.hidden = false;
+    }
+
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
+      calculate();
+    });
+
+    // Register the service worker located in the root folder.
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('./sw.js')
+          .catch(function(error) {
+            console.error('Service Worker registration failed:', error);
+          });
+      });
+    }
+  </script>
 </body>
 </html>
 ```
