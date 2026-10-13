@@ -1,6 +1,6 @@
 ```javascript
 // Promeni verziju pri svakom objavljivanju nove verzije sajta
-const VERSION = 'ett-calculator-v2';
+const VERSION = 'ett-calculator-v3';
 
 self.addEventListener('install', event => {
   event.waitUntil(self.skipWaiting());
