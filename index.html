@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -58,7 +59,6 @@
     color: #34495e;
   }
 
-  select,
   input {
     width: 100%;
     padding: 10px;
@@ -126,14 +126,9 @@
   <h2>Pediatric ETT Calculator</h2>
 
   <div class="age-warning">
-    ⚠️ IMPORTANT: This calculator is valid ONLY for children up to 8 years of age.
+    ⚠️ IMPORTANT: This calculator is intended ONLY
+    for children up to 8 years of age.
   </div>
-
-  <label for="gender">Gender</label>
-  <select id="gender">
-    <option value="1">Male</option>
-    <option value="0">Female</option>
-  </select>
 
   <label for="height">Body Height (cm)</label>
   <input
@@ -158,47 +153,38 @@
   </div>
 
   <div class="formula">
-    Formula: ID = 0.128 × gender + 0.029 × BH + 2.06
+    Formula: ID = 2.1152 + 0.02963 × height
   </div>
 
   <div class="note">
-    Male = 1, Female = 0<br>
-    BH = Body Height in cm<br>
-    ID = Internal Diameter in mm<br><br>
+    Height = Body height in cm<br>
+    ID = Internal diameter in mm<br><br>
     This calculator is intended as a guideline only.
-    Always use clinical judgment and follow local clinical protocols.
+    Always use clinical judgment and follow local
+    clinical protocols.
   </div>
 
 </div>
 
 <script>
-
 function calculate() {
-
-  const gender = parseFloat(
-    document.getElementById('gender').value
-  );
-
   const height = parseFloat(
     document.getElementById('height').value
   );
 
-  if (isNaN(height) || height <= 0) {
-    alert('Please enter a valid body height.');
+  if (
+    !Number.isFinite(height) ||
+    height < 40 ||
+    height > 150
+  ) {
+    alert('Please enter a height between 40 and 150 cm.');
     return;
   }
 
-  /*
-    Formula:
-    ID = 0.128 × gender + 0.029 × BH + 2.06
+  // Final model:
+  // ID (mm) = 2.1152 + 0.02963 × height (cm)
 
-    Male = 1
-    Female = 0
-    BH = Body Height in cm
-    ID = Internal Diameter in mm
-  */
-
-  const id = 0.128 * gender + 0.029 * height + 2.06;
+  const id = 2.1152 + 0.02963 * height;
 
   // Standard ETT sizes from 5.0 mm to 9.0 mm
   const standardSizes = [];
@@ -224,13 +210,15 @@ function calculate() {
     'block';
 }
 
-
 // Register service worker for PWA functionality
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js');
+  navigator.serviceWorker.register('sw.js')
+    .catch(error => console.error(
+      'Service worker registration failed:', error
+    ));
 }
-
 </script>
 
 </body>
 </html>
+```
